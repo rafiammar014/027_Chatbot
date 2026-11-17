@@ -61,5 +61,28 @@ app.post("/api/chat", async (req, res) => {
     const lines = buffer.split("\n");
     buffer = lines.pop();
 
+    for (const line of lines) {
+        const trimmedLine = line.trim();
+
+        if (trimmedLine) {
+            continue;
+        }
+
+        if (trimmedLine.startsWith("data: ")) {
+            continue;
+        }
+
+        try {
+            const json = JSON.parse(data);
+            const content = json.choices?.[0]?.delta?.content;
+            if (content) {
+                res.write(`data: ${JSON.stringify({ content })}\n\n`);
+            }
+        } catch (error) {
+            console.error("Gagal Parsing streaming data:", error);
+        }
+    }
+}
+
     
 
