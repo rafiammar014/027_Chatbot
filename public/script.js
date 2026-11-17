@@ -354,6 +354,9 @@ function renderHistory() {
       .slice()
       .reverse()
       .forEach((chat) => {
+        const row = document.createElement('div');
+        row.className = 'history__row';
+
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'history__item' + (chat.id === state.activeChatId ? ' is-active' : '');
@@ -361,11 +364,47 @@ function renderHistory() {
         btn.querySelector('span').textContent = chat.title;
         btn.title = chat.title;
         btn.addEventListener('click', () => openChat(chat.id));
-        historyEl.appendChild(btn);
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.type = 'button';
+        deleteBtn.className = 'history__delete';
+        deleteBtn.innerHTML = icon('trash');
+        deleteBtn.setAttribute('aria-label', `Hapus percakapan ${chat.title}`);
+        deleteBtn.title = 'Hapus percakapan';
+        deleteBtn.addEventListener('click', (event) => {
+          event.stopPropagation();
+          deleteChat(chat.id);
+        });
+
+        row.append(btn, deleteBtn);
+        historyEl.appendChild(row);
       });
   }
 
   if (historyCnt) historyCnt.textContent = String(state.chats.length);
+}
+
+function deleteChat(id) {
+  const chat = state.chats.find((item) => item.id === id);
+  if (!chat || !window.confirm(`Hapus percakapan "${chat.title}"?`)) return;
+
+  state.chats = state.chats.filter((item) => item.id !== id);
+  saveChats();
+
+  if (state.activeChatId === id) {
+    newChat();
+  } else {
+    renderHistory();
+  }
+}
+
+function clearHistory() {
+  if (!state.chats.length) return;
+  if (!window.confirm('Hapus semua riwayat percakapan?')) return;
+
+  state.chats = [];
+  saveChats();
+  newChat();
 }
 
 /** Simpan / perbarui percakapan aktif. */
@@ -431,6 +470,7 @@ function initHistory() {
   loadChats();
   renderHistory();
   $('#newChatBtn')?.addEventListener('click', newChat);
+  $('#clearHistoryBtn')?.addEventListener('click', clearHistory);
 }
 
 

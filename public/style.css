@@ -436,6 +436,48 @@ body.nav-open .backdrop {
   padding: 1px 8px;
 }
 
+.sidebar__tools {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.history__clear,
+.history__delete {
+  display: grid;
+  place-items: center;
+  color: var(--text-subtle);
+  border-radius: var(--r-xs);
+  opacity: 0;
+  transition: color var(--dur-fast) var(--ease-out),
+              opacity var(--dur-fast) var(--ease-out),
+              background-color var(--dur-fast) var(--ease-out);
+}
+
+.history__clear {
+  width: 22px;
+  height: 22px;
+}
+
+.history__clear .icon,
+.history__delete .icon {
+  width: 15px;
+  height: 15px;
+}
+
+.history__clear:hover,
+.history__delete:hover {
+  color: var(--danger);
+  background-color: var(--danger-soft);
+}
+
+.sidebar__label:hover .history__clear,
+.history__row:hover .history__delete,
+.history__delete:focus-visible,
+.history__clear:focus-visible {
+  opacity: 1;
+}
+
 /* ---- Daftar riwayat chat ---- */
 .history {
   flex: 1 1 auto;
@@ -447,6 +489,12 @@ body.nav-open .backdrop {
   margin: 0 calc(var(--sp-2) * -1);
   padding: 0 var(--sp-2) var(--sp-1);
   scrollbar-gutter: stable;
+}
+
+.history__row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
 }
 
 .history__item {
@@ -462,6 +510,21 @@ body.nav-open .backdrop {
   text-align: left;
   transition: background-color var(--dur-fast) var(--ease-out),
               color var(--dur-fast) var(--ease-out);
+}
+
+.history__row .history__item {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.history__delete {
+  flex: 0 0 28px;
+  width: 28px;
+  height: 32px;
+}
+
+.history__row:hover .history__item {
+  color: var(--text);
 }
 
 .history__item .icon {

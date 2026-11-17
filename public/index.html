@@ -52,6 +52,9 @@
       <path d="m3 21 9-9M14 7l2-2 3 3-2 2ZM15 4l1-1M20 9l1-1M4 14l1-1"/>
     </symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24">
+      <path d="M3 6h18M8 6V4h8v2M19 6l-1 15H6L5 6M10 11v6M14 11v6"/>
+    </symbol>
   </svg>
 
   <div class="backdrop" data-close-nav aria-hidden="true"></div>
@@ -75,7 +78,13 @@
 
       <div class="sidebar__label">
         <span>Riwayat</span>
-        <span class="sidebar__count" id="historyCount">0</span>
+        <span class="sidebar__tools">
+          <button class="history__clear" type="button" id="clearHistoryBtn"
+                  aria-label="Hapus semua riwayat" title="Hapus semua riwayat">
+            <svg class="icon"><use href="#i-trash"/></svg>
+          </button>
+          <span class="sidebar__count" id="historyCount">0</span>
+        </span>
       </div>
 
       <nav class="history" id="history" aria-label="Riwayat percakapan">
