@@ -49,5 +49,10 @@ app.post("/api/chat", async (req, res) => {
     res.setHeader("Cache-Control", "no-cache");
     res.setHeader
 
-    
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder("utf-8");
+
+
+
+
 
