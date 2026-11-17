@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a8f6c">
+  <title>NeoTea — AI Chat</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Sprite ikon: dipakai lewat <use href="#i-nama"> -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-leaf" viewBox="0 0 24 24">
+      <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+      <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+    </symbol>
+    <symbol id="i-sparkle" viewBox="0 0 24 24">
+      <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/>
+    </symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24">
+      <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>
+    </symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="4"/>
+      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+    </symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24">
+      <path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/>
+    </symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24">
+      <rect x="9" y="9" width="12" height="12" rx="2"/>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+    </symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/>
+    </symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24">
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/>
+    </symbol>
+    <symbol id="i-wand" viewBox="0 0 24 24">
+      <path d="m3 21 9-9M14 7l2-2 3 3-2 2ZM15 4l1-1M20 9l1-1M4 14l1-1"/>
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  </svg>
+
+  <div class="backdrop" data-close-nav aria-hidden="true"></div>
+
+  <div class="app">
+
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar" id="sidebar" aria-label="Navigasi utama">
+      <div class="brand">
+        <span class="brand__mark"><svg class="icon"><use href="#i-leaf"/></svg></span>
+        <div class="brand__text">
+          <div class="brand__name">NeoTea</div>
+          <div class="brand__tag">Asisten AI pribadi</div>
+        </div>
+      </div>
+
+      <button class="btn-new" type="button" id="newChatBtn">
+        <svg class="icon"><use href="#i-plus"/></svg>
+        Percakapan Baru
+      </button>
+
+      <div class="sidebar__label">
+        <span>Riwayat</span>
+        <span class="sidebar__count" id="historyCount">0</span>
+      </div>
+
+      <nav class="history" id="history" aria-label="Riwayat percakapan">
+        <p class="history__empty" id="historyEmpty">Belum ada percakapan.<br>Mulai obrolan pertamamu!</p>
+      </nav>
+
+      <div class="sidebar__footer">
+        <button class="user-card" type="button">
+          <span class="avatar">KU</span>
+          <span class="user-card__meta">
+            <span class="user-card__name">Pengguna</span>
+            <span class="user-card__status">
+              <span class="status-dot"></span>
+              <span id="connStatus">Terhubung</span>
+            </span>
+          </span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- ================= MAIN ================= -->
+    <main class="main">
+
+      <header class="topbar">
+        <button class="icon-btn icon-btn--menu" type="button" id="menuBtn" aria-label="Buka menu">
+          <svg class="icon"><use href="#i-menu"/></svg>
+        </button>
+
+        <div class="topbar__title">
+          <div class="topbar__name" id="chatTitle">Percakapan Baru</div>
+          <div class="topbar__meta">
+            <span class="status-dot"></span>
+            <span>Gemini · siap membantu</span>
+          </div>
+        </div>
+
+        <span class="spacer"></span>
+
+        <button class="icon-btn theme-toggle" type="button" id="themeToggle"
+                aria-label="Ubah tema tampilan" title="Ubah tema">
+          <svg class="icon icon-moon"><use href="#i-moon"/></svg>
+          <svg class="icon icon-sun"><use href="#i-sun"/></svg>
+        </button>
+      </header>
+
+      <section class="chat" id="chat" aria-live="polite" aria-label="Percakapan">
+        <div class="chat__inner" id="messages">
+
+          <!-- Empty state -->
+          <div class="welcome" id="welcome">
+            <span class="welcome__badge"><svg class="icon"><use href="#i-sparkle"/></svg></span>
+            <div class="welcome__head">
+              <h1 class="welcome__title">Halo, ada yang bisa saya bantu?</h1>
+              <p class="welcome__sub">
+                Tanyakan apa saja — menulis kode, merangkum, atau menjelaskan
+                ide rumit dengan bahasa sederhana.
+              </p>
+            </div>
+
+            <div class="suggestions">
+              <button class="suggestion" type="button" data-prompt="Jelaskan cara kerja CSS Grid dengan analogi sederhana.">
+                <span class="suggestion__icon"><svg class="icon"><use href="#i-code"/></svg></span>
+                <span class="suggestion__text">
+                  <span class="suggestion__title">Jelaskan CSS Grid</span>
+                  <span class="suggestion__desc">Dengan analogi sederhana</span>
+                </span>
+              </button>
+
+              <button class="suggestion" type="button" data-prompt="Buatkan ringkasan singkat tentang Express.js dan kegunaannya.">
+                <span class="suggestion__icon"><svg class="icon"><use href="#i-book"/></svg></span>
+                <span class="suggestion__text">
+                  <span class="suggestion__title">Ringkas Express.js</span>
+                  <span class="suggestion__desc">Poin-poin pentingnya</span>
+                </span>
+              </button>
+
+              <button class="suggestion" type="button" data-prompt="Tuliskan fungsi JavaScript untuk memformat tanggal ke format Indonesia.">
+                <span class="suggestion__icon"><svg class="icon"><use href="#i-wand"/></svg></span>
+                <span class="suggestion__text">
+                  <span class="suggestion__title">Tulis fungsi JS</span>
+                  <span class="suggestion__desc">Format tanggal Indonesia</span>
+                </span>
+              </button>
+
+              <button class="suggestion" type="button" data-prompt="Beri tips menulis desain dashboard yang bersih dan mudah dibaca.">
+                <span class="suggestion__icon"><svg class="icon"><use href="#i-sparkle"/></svg></span>
+                <span class="suggestion__text">
+                  <span class="suggestion__title">Tips desain UI</span>
+                  <span class="suggestion__desc">Dashboard yang bersih</span>
+                </span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <div class="composer">
+        <div class="composer__inner">
+          <form class="composer__box" id="chatForm">
+            <label class="sr-only" for="input">Tulis pesan</label>
+            <textarea class="composer__field" id="input" rows="1"
+                      placeholder="Tanya apa saja…"
+                      autocomplete="off" spellcheck="true"></textarea>
+            <button class="btn-send" type="submit" id="sendBtn" aria-label="Kirim pesan" disabled>
+              <svg class="icon"><use href="#i-send"/></svg>
+            </button>
+          </form>
+
+          <p class="composer__hint">
+            <span class="composer__hint-item"><kbd>Enter</kbd> kirim</span>
+            <span class="composer__hint-sep" aria-hidden="true">·</span>
+            <span class="composer__hint-item"><kbd>Shift</kbd><span aria-hidden="true">+</span><kbd>Enter</kbd> baris baru</span>
+          </p>
+        </div>
+
+        <button class="scroll-bottom" type="button" id="scrollBottom" aria-label="Gulir ke bawah">
+          <svg class="icon"><use href="#i-down"/></svg>
+        </button>
+      </div>
+
+    </main>
+  </div>
+
+  <div class="toast-wrap" id="toasts" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
