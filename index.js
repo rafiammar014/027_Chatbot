@@ -21,3 +21,22 @@ app.post("/api/chat", async (req, res) => {
             return res.status(400).json({ error: "Message harus berupa array." });
         }
 
+        const response = await fetch("https://openrouter.ai/api/v1/chat/completions", 
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`
+                },
+                body: JSON.stringify({
+                model: "gemini-3.8-flash",
+                messages: message,
+                temperature: 0.7,
+                max_tokens: 1000,
+                stream: true
+            })
+        }
+    );
+
+    
