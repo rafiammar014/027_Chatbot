@@ -1,0 +1,1459 @@
+/* ==========================================================================
+   NEOTEA — AI Chat Dashboard
+   Design System: dual theme (light / dark), accent hijau-teal
+   --------------------------------------------------------------------------
+   Daftar isi
+   01. Design tokens (light + dark theme)
+   02. Reset & base
+   03. Utilities & aksesibilitas
+   04. Layout utama (app shell)
+   05. Sidebar
+   06. Topbar
+   07. Area chat (messages, bubble, markdown)
+   08. Composer (input)
+   09. Empty state
+   10. Komponen pendukung
+   11. Animasi
+   12. Responsive
+   13. Reduced motion & print
+   ========================================================================== */
+
+
+/* ==========================================================================
+   01. DESIGN TOKENS
+   ========================================================================== */
+
+:root {
+  /* ---- Palette: brand (hijau-teal) ---- */
+  --teal-50:  #eefbf6;
+  --teal-100: #d3f5e9;
+  --teal-200: #a8ebd5;
+  --teal-300: #6fdcbb;
+  --teal-400: #34c79d;
+  --teal-500: #12b083;
+  --teal-600: #0a8f6c;
+  --teal-700: #0b7257;
+  --teal-800: #0d5b47;
+  --teal-900: #0c4b3b;
+
+  /* ---- Accent role tokens (light theme default) ---- */
+  --accent:        var(--teal-600);
+  --accent-hover:  var(--teal-700);
+  --accent-soft:   var(--teal-100);
+  --accent-ring:   rgba(10, 143, 108, 0.28);
+  --accent-on:     #ffffff;
+
+  /* ---- Surfaces ---- */
+  --bg:            #f6f8f8;
+  --bg-subtle:     #eef2f1;
+  --surface:       #ffffff;
+  --surface-2:     #f9fbfb;
+  --surface-hover: #f1f5f4;
+  --surface-glass: rgba(255, 255, 255, 0.72);
+
+  /* ---- Text ---- */
+  --text:          #10201c;
+  --text-muted:    #5b6b66;
+  --text-subtle:   #8a9995;
+  --text-inverse:  #ffffff;
+
+  /* ---- Borders ---- */
+  --border:        #e2e9e7;
+  --border-strong: #cbd6d3;
+
+  /* ---- Semantik ---- */
+  --success:     #12b083;
+  --danger:      #e0464b;
+  --danger-soft: #fdeced;
+  --warning:     #e5a00d;
+
+  /* ---- Bubble chat ---- */
+  --bubble-user-from: var(--teal-600);
+  --bubble-user-to:   var(--teal-500);
+  --bubble-user-text: #ffffff;
+  --bubble-ai-bg:     var(--surface);
+  --bubble-ai-text:   var(--text);
+
+  /* ---- Elevation ---- */
+  --shadow-xs:   0 1px 2px rgba(16, 32, 28, 0.06);
+  --shadow-sm:   0 1px 3px rgba(16, 32, 28, 0.08), 0 1px 2px rgba(16, 32, 28, 0.04);
+  --shadow-md:   0 4px 12px rgba(16, 32, 28, 0.08), 0 2px 4px rgba(16, 32, 28, 0.04);
+  --shadow-lg:   0 12px 32px rgba(16, 32, 28, 0.12), 0 4px 8px rgba(16, 32, 28, 0.05);
+  --shadow-glow: 0 8px 24px rgba(10, 143, 108, 0.28);
+
+  /* ---- Radius ---- */
+  --r-xs:   6px;
+  --r-sm:   10px;
+  --r-md:   14px;
+  --r-lg:   20px;
+  --r-xl:   28px;
+  --r-full: 999px;
+
+  /* ---- Spacing scale (4px base) ---- */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+
+  /* ---- Typography ---- */
+  --font-sans: "Inter", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "Cascadia Code", ui-monospace, "SF Mono", Consolas, monospace;
+
+  --fs-xs:   0.75rem;
+  --fs-sm:   0.875rem;
+  --fs-base: 0.9375rem;
+  --fs-md:   1rem;
+  --fs-lg:   1.125rem;
+  --fs-xl:   1.375rem;
+  --fs-2xl:  1.75rem;
+
+  /* ---- Layout ---- */
+  --sidebar-w:  268px;
+  --topbar-h:   64px;
+  --chat-max-w: 820px;
+
+  /* ---- Motion ---- */
+  --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 120ms;
+  --dur:      200ms;
+  --dur-slow: 320ms;
+}
+
+/* ---- Dark theme ---- */
+[data-theme="dark"] {
+  --accent:       var(--teal-400);
+  --accent-hover: var(--teal-300);
+  --accent-soft:  rgba(52, 199, 157, 0.14);
+  --accent-ring:  rgba(52, 199, 157, 0.32);
+  --accent-on:    #06201a;
+
+  --bg:            #0b1211;
+  --bg-subtle:     #0e1615;
+  --surface:       #121c1a;
+  --surface-2:     #16211f;
+  --surface-hover: #1b2725;
+  --surface-glass: rgba(18, 28, 26, 0.72);
+
+  --text:          #e8f1ee;
+  --text-muted:    #9aaba6;
+  --text-subtle:   #6d7d79;
+  --text-inverse:  #06201a;
+
+  --border:        #223230;
+  --border-strong: #2f4340;
+
+  --success:     #34c79d;
+  --danger:      #f2686d;
+  --danger-soft: rgba(242, 104, 109, 0.12);
+  --warning:     #f0b429;
+
+  --bubble-user-from: var(--teal-600);
+  --bubble-user-to:   var(--teal-700);
+  --bubble-user-text: #f2fffb;
+  --bubble-ai-bg:     var(--surface-2);
+  --bubble-ai-text:   var(--text);
+
+  --shadow-xs:   0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-sm:   0 1px 3px rgba(0, 0, 0, 0.45);
+  --shadow-md:   0 4px 14px rgba(0, 0, 0, 0.5);
+  --shadow-lg:   0 16px 40px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 8px 28px rgba(52, 199, 157, 0.22);
+}
+
+
+/* ==========================================================================
+   02. RESET & BASE
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  font-family: var(--font-sans);
+  font-size: var(--fs-base);
+  line-height: 1.6;
+  color: var(--text);
+  background-color: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow: hidden; /* scroll dikelola area chat */
+  transition: background-color var(--dur) var(--ease-in-out),
+              color var(--dur) var(--ease-in-out);
+}
+
+/* Latar dekoratif halus */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle at 10% 0%, var(--accent-soft), transparent 45%),
+    radial-gradient(circle at 90% 100%, var(--accent-soft), transparent 42%);
+  opacity: 0.6;
+}
+
+img, svg, video { display: block; max-width: 100%; }
+
+button, input, textarea, select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+h1, h2, h3, h4 {
+  line-height: 1.25;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+}
+
+/* Fokus jelas & konsisten untuk keyboard */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--r-xs);
+}
+
+::selection {
+  background-color: var(--accent-soft);
+  color: var(--text);
+}
+
+
+/* ==========================================================================
+   03. UTILITIES & AKSESIBILITAS
+   ========================================================================== */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+.row      { display: flex; align-items: center; }
+.spacer   { flex: 1 1 auto; }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.is-hidden { display: none !important; }
+
+
+/* ==========================================================================
+   04. LAYOUT UTAMA (APP SHELL)
+   Grid dua kolom: sidebar + main. Main = topbar + chat + composer.
+   ========================================================================== */
+
+.app {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+  height: 100vh;
+  height: 100dvh;
+  width: 100%;
+  min-height: 0;
+}
+
+/* ---- Kolom main ---- */
+.main {
+  display: grid;
+  grid-template-rows: var(--topbar-h) minmax(0, 1fr) auto;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  background-color: transparent;
+}
+
+/* ---- Backdrop untuk sidebar mobile ---- */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background-color: rgba(6, 18, 15, 0.48);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--dur) var(--ease-out),
+              visibility var(--dur) var(--ease-out);
+}
+
+body.nav-open .backdrop {
+  opacity: 1;
+  visibility: visible;
+}
+
+
+/* ==========================================================================
+   05. SIDEBAR
+   ========================================================================== */
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  height: 100%;
+  min-height: 0;
+  padding: var(--sp-5) var(--sp-4);
+  background-color: var(--surface);
+  border-right: 1px solid var(--border);
+  transition: background-color var(--dur) var(--ease-in-out),
+              border-color var(--dur) var(--ease-in-out);
+  z-index: 50;
+}
+
+/* ---- Brand ---- */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 0 var(--sp-1);
+}
+
+.brand__mark {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--r-md);
+  color: var(--accent-on);
+  background: linear-gradient(135deg, var(--teal-400), var(--teal-700));
+  box-shadow: var(--shadow-glow);
+  flex-shrink: 0;
+}
+
+.brand__mark .icon {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2.2;
+}
+
+.brand__text { min-width: 0; }
+
+.brand__name {
+  font-size: var(--fs-md);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.brand__tag {
+  font-size: var(--fs-xs);
+  color: var(--text-subtle);
+  line-height: 1.3;
+}
+
+/* ---- Tombol New Chat ---- */
+.btn-new {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  width: 100%;
+  padding: var(--sp-3) var(--sp-4);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--accent-on);
+  background: linear-gradient(135deg, var(--teal-500), var(--teal-700));
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-glow);
+  transition: transform var(--dur-fast) var(--ease-out),
+              box-shadow var(--dur) var(--ease-out),
+              filter var(--dur) var(--ease-out);
+}
+
+.btn-new:hover {
+  filter: brightness(1.07);
+  box-shadow: 0 10px 28px rgba(10, 143, 108, 0.38);
+  transform: translateY(-1px);
+}
+
+.btn-new:active { transform: translateY(0) scale(0.985); }
+
+.btn-new .icon { stroke-width: 2.4; }
+
+/* ---- Label section sidebar ---- */
+.sidebar__label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--sp-2);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+}
+
+.sidebar__count {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--text-muted);
+  background-color: var(--bg-subtle);
+  border-radius: var(--r-full);
+  padding: 1px 8px;
+}
+
+/* ---- Daftar riwayat chat ---- */
+.history {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0 calc(var(--sp-2) * -1);
+  padding: 0 var(--sp-2) var(--sp-1);
+  scrollbar-gutter: stable;
+}
+
+.history__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  width: 100%;
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  text-align: left;
+  transition: background-color var(--dur-fast) var(--ease-out),
+              color var(--dur-fast) var(--ease-out);
+}
+
+.history__item .icon {
+  width: 16px;
+  height: 16px;
+  color: var(--text-subtle);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.history__item span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.history__item:hover {
+  background-color: var(--surface-hover);
+  color: var(--text);
+}
+
+.history__item:hover .icon { color: var(--accent); }
+
+.history__item.is-active {
+  background-color: var(--accent-soft);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.history__item.is-active .icon { color: var(--accent); }
+
+/* Indikator batang di kiri item aktif */
+.history__item.is-active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 18px;
+  border-radius: var(--r-full);
+  background-color: var(--accent);
+}
+
+.history__empty {
+  padding: var(--sp-6) var(--sp-3);
+  font-size: var(--fs-sm);
+  color: var(--text-subtle);
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* ---- Footer sidebar ---- */
+.sidebar__footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--border);
+}
+
+/* ---- Kartu profil pengguna ---- */
+.user-card {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-2);
+  border-radius: var(--r-md);
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.user-card:hover { background-color: var(--surface-hover); }
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--r-full);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--accent-on);
+  background: linear-gradient(135deg, var(--teal-400), var(--teal-600));
+  flex-shrink: 0;
+}
+
+.user-card__meta { min-width: 0; line-height: 1.3; }
+
+.user-card__name {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.user-card__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-xs);
+  color: var(--text-subtle);
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--r-full);
+  background-color: var(--success);
+  box-shadow: 0 0 0 3px rgba(18, 176, 131, 0.16);
+  flex-shrink: 0;
+}
+
+
+/* ==========================================================================
+   06. TOPBAR
+   ========================================================================== */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 0 var(--sp-5);
+  background-color: var(--surface-glass);
+  backdrop-filter: saturate(1.4) blur(14px);
+  -webkit-backdrop-filter: saturate(1.4) blur(14px);
+  border-bottom: 1px solid var(--border);
+  transition: background-color var(--dur) var(--ease-in-out),
+              border-color var(--dur) var(--ease-in-out);
+  z-index: 20;
+}
+
+.topbar__title {
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.topbar__name {
+  font-size: var(--fs-md);
+  font-weight: 650;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.topbar__meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-xs);
+  line-height: 1.3;
+  color: var(--text-subtle);
+}
+
+/* ---- Tombol ikon generik ---- */
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--r-sm);
+  color: var(--text-muted);
+  border: 1px solid transparent;
+  transition: background-color var(--dur-fast) var(--ease-out),
+              color var(--dur-fast) var(--ease-out),
+              border-color var(--dur-fast) var(--ease-out),
+              transform var(--dur-fast) var(--ease-out);
+}
+
+.icon-btn:hover {
+  background-color: var(--surface-hover);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.icon-btn:active { transform: scale(0.94); }
+
+.icon-btn--ghost { border-color: transparent; }
+
+/* Menu hamburger hanya tampil di layar kecil */
+.icon-btn--menu { display: none; }
+
+/* ---- Toggle tema ---- */
+.theme-toggle {
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-toggle .icon {
+  transition: transform var(--dur-slow) var(--ease-out),
+              opacity var(--dur) var(--ease-out);
+}
+
+/* Light theme: tampilkan ikon bulan (aksi: ke gelap) */
+.theme-toggle .icon-moon { display: block; }
+.theme-toggle .icon-sun  { display: none; }
+
+/* Dark theme: tampilkan ikon matahari (aksi: ke terang) */
+[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+[data-theme="dark"] .theme-toggle .icon-sun  { display: block; }
+
+.theme-toggle:hover .icon { transform: rotate(18deg) scale(1.06); }
+
+
+/* ==========================================================================
+   07. AREA CHAT
+   ========================================================================== */
+
+.chat {
+  position: relative;
+  min-height: 0;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  scroll-padding-block: var(--sp-6);
+}
+
+.chat__inner {
+  width: 100%;
+  max-width: var(--chat-max-w);
+  margin: 0 auto;
+  padding: var(--sp-8) var(--sp-5) var(--sp-10);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+/* ---- Baris pesan ---- */
+.msg {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  animation: msg-in var(--dur-slow) var(--ease-out) both;
+}
+
+.msg--user {
+  flex-direction: row-reverse;
+}
+
+/* ---- Avatar pesan ---- */
+.msg__avatar {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-full);
+  flex-shrink: 0;
+  margin-top: 2px;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+}
+
+.msg__avatar--ai {
+  color: var(--accent-on);
+  background: linear-gradient(135deg, var(--teal-400), var(--teal-700));
+  box-shadow: var(--shadow-sm);
+}
+
+.msg__avatar--ai .icon {
+  width: 17px;
+  height: 17px;
+  stroke-width: 2.2;
+}
+
+.msg__avatar--user {
+  color: var(--text);
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border);
+}
+
+/* ---- Grup konten ---- */
+.msg__body {
+  min-width: 0;
+  max-width: min(78%, 640px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.msg--user .msg__body { align-items: flex-end; }
+
+/* ---- Bubble ---- */
+.bubble {
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-lg);
+  font-size: var(--fs-base);
+  line-height: 1.65;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Bubble user: gradient + sudut tajam di kanan atas */
+.msg--user .bubble {
+  color: var(--bubble-user-text);
+  background: linear-gradient(135deg, var(--bubble-user-from), var(--bubble-user-to));
+  border-bottom-right-radius: var(--r-xs);
+  box-shadow: 0 4px 14px rgba(10, 143, 108, 0.22);
+  white-space: pre-wrap;
+}
+
+/* Bubble AI: surface + border + sudut tajam di kiri atas */
+.msg--ai .bubble {
+  color: var(--bubble-ai-text);
+  background-color: var(--bubble-ai-bg);
+  border: 1px solid var(--border);
+  border-bottom-left-radius: var(--r-xs);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ---- Konten kaya (markdown) di dalam bubble AI ---- */
+.bubble > * + * { margin-top: var(--sp-3); }
+
+.bubble p { margin: 0; }
+
+.bubble strong { font-weight: 680; color: var(--text); }
+
+.bubble ul,
+.bubble ol {
+  margin: 0;
+  padding-left: 1.35em;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bubble li::marker { color: var(--accent); }
+
+.bubble h1, .bubble h2, .bubble h3 {
+  font-size: var(--fs-md);
+  font-weight: 700;
+  margin-top: var(--sp-4);
+}
+
+.bubble code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  padding: 2px 6px;
+  border-radius: var(--r-xs);
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.bubble pre {
+  position: relative;
+  padding: var(--sp-4);
+  border-radius: var(--r-md);
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border);
+  overflow-x: auto;
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+}
+
+.bubble pre code {
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: inherit;
+  white-space: pre;
+}
+
+.bubble blockquote {
+  padding-left: var(--sp-4);
+  border-left: 3px solid var(--accent-soft);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.bubble a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+}
+
+.bubble hr {
+  border: none;
+  border-top: 1px solid var(--border);
+}
+
+/* ---- Indikator "mengetik" ---- */
+.typing {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: var(--sp-1) 0;
+}
+
+.typing__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--r-full);
+  background-color: var(--accent);
+  opacity: 0.45;
+  animation: typing-bounce 1.25s var(--ease-in-out) infinite;
+}
+
+.typing__dot:nth-child(2) { animation-delay: 0.16s; }
+.typing__dot:nth-child(3) { animation-delay: 0.32s; }
+
+/* Kursor berkedip saat streaming */
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.05em;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  border-radius: 1px;
+  background-color: var(--accent);
+  animation: blink 1s steps(2, start) infinite;
+}
+
+/* ---- Banner error ---- */
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-md);
+  font-size: var(--fs-sm);
+  color: var(--danger);
+  background-color: var(--danger-soft);
+  border: 1px solid color-mix(in srgb, var(--danger) 28%, transparent);
+}
+
+.alert .icon { margin-top: 2px; }
+
+
+/* ==========================================================================
+   08. COMPOSER (INPUT)
+   ========================================================================== */
+
+.composer {
+  position: relative;
+  padding: var(--sp-3) var(--sp-5) var(--sp-5);
+  background: linear-gradient(to top, var(--bg) 72%, transparent);
+}
+
+.composer__inner {
+  width: 100%;
+  max-width: var(--chat-max-w);
+  margin: 0 auto;
+}
+
+/* ---- Kotak input ---- */
+.composer__box {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-2) var(--sp-2) var(--sp-3);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md);
+  transition: border-color var(--dur) var(--ease-out),
+              box-shadow var(--dur) var(--ease-out),
+              background-color var(--dur) var(--ease-in-out);
+}
+
+/* Ring fokus saat textarea aktif */
+.composer__box:focus-within {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-md), 0 0 0 4px var(--accent-ring);
+}
+
+.composer__box.is-disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.composer__field {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-height: 180px;
+  padding: var(--sp-2) var(--sp-1);
+  font-size: var(--fs-base);
+  line-height: 1.55;
+  color: var(--text);
+  background: none;
+  border: none;
+  resize: none;
+  outline: none;
+  overflow-y: auto;
+  font-family: inherit;
+}
+
+.composer__field::placeholder { color: var(--text-subtle); }
+
+/* ---- Tombol kirim ---- */
+.btn-send {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--r-md);
+  color: var(--accent-on);
+  background: linear-gradient(135deg, var(--teal-500), var(--teal-700));
+  box-shadow: var(--shadow-glow);
+  flex-shrink: 0;
+  transition: transform var(--dur-fast) var(--ease-out),
+              filter var(--dur) var(--ease-out),
+              opacity var(--dur) var(--ease-out),
+              box-shadow var(--dur) var(--ease-out);
+}
+
+.btn-send:hover {
+  filter: brightness(1.08);
+  box-shadow: 0 10px 26px rgba(10, 143, 108, 0.4);
+}
+
+.btn-send:active { transform: scale(0.92); }
+
+.btn-send:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  filter: none;
+  box-shadow: none;
+  transform: none;
+}
+
+.btn-send .icon { stroke-width: 2.2; }
+
+/* ---- Hint di bawah composer ---- */
+.composer__hint {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  margin-top: var(--sp-3);
+  font-size: var(--fs-xs);
+  line-height: 1;
+  color: var(--text-subtle);
+  text-align: center;
+}
+
+.composer__hint-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.composer__hint-sep {
+  color: var(--border-strong);
+  user-select: none;
+}
+
+kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  line-height: 1;
+  text-align: center;
+  color: var(--text-muted);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  border-radius: var(--r-xs);
+}
+
+
+/* ==========================================================================
+   09. EMPTY STATE (sambutan + saran prompt)
+   ========================================================================== */
+
+.welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-5);
+  padding: var(--sp-6) 0 var(--sp-8);
+  text-align: center;
+  animation: fade-up var(--dur-slow) var(--ease-out) both;
+}
+
+.welcome__badge {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--r-lg);
+  color: var(--accent-on);
+  background: linear-gradient(135deg, var(--teal-400), var(--teal-700));
+  box-shadow: var(--shadow-glow);
+}
+
+.welcome__badge .icon {
+  width: 30px;
+  height: 30px;
+  stroke-width: 1.8;
+}
+
+.welcome__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.welcome__title {
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+  max-width: 22ch;
+  background: linear-gradient(120deg, var(--text) 30%, var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding-bottom: 0.08em;
+  text-wrap: balance;
+}
+
+.welcome__sub {
+  margin: 0;
+  max-width: 46ch;
+  font-size: var(--fs-base);
+  line-height: 1.6;
+  color: var(--text-muted);
+  text-wrap: pretty;
+}
+
+/* ---- Grid kartu saran ---- */
+.suggestions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-3);
+  width: 100%;
+  margin-top: var(--sp-2);
+}
+
+.suggestion {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  text-align: left;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-xs);
+  transition: transform var(--dur) var(--ease-out),
+              border-color var(--dur) var(--ease-out),
+              box-shadow var(--dur) var(--ease-out),
+              background-color var(--dur) var(--ease-out);
+}
+
+.suggestion:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow: var(--shadow-md);
+}
+
+.suggestion__icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-sm);
+  color: var(--accent);
+  background-color: var(--accent-soft);
+  flex-shrink: 0;
+}
+
+.suggestion__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  line-height: 1.35;
+}
+
+.suggestion__title {
+  display: block;
+  font-size: var(--fs-sm);
+  font-weight: 650;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+.suggestion__desc {
+  display: block;
+  font-size: var(--fs-xs);
+  color: var(--text-subtle);
+}
+
+
+/* ==========================================================================
+   10. KOMPONEN PENDUKUNG
+   ========================================================================== */
+
+/* ---- Toast notifikasi ---- */
+.toast-wrap {
+  position: fixed;
+  left: 50%;
+  bottom: var(--sp-6);
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--text-inverse);
+  background-color: var(--text);
+  border-radius: var(--r-full);
+  box-shadow: var(--shadow-lg);
+  pointer-events: auto;
+  animation: toast-in var(--dur) var(--ease-out) both;
+}
+
+[data-theme="dark"] .toast {
+  color: var(--text);
+  background-color: var(--surface-2);
+  border: 1px solid var(--border-strong);
+}
+
+.toast .icon {
+  width: 15px;
+  height: 15px;
+  color: var(--teal-300);
+}
+
+.toast.is-leaving { animation: toast-out var(--dur) var(--ease-in-out) both; }
+
+/* ---- Scrollbar kustom ---- */
+.chat,
+.history,
+.composer__field,
+.bubble pre {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+.chat::-webkit-scrollbar,
+.history::-webkit-scrollbar,
+.composer__field::-webkit-scrollbar,
+.bubble pre::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.chat::-webkit-scrollbar-track,
+.history::-webkit-scrollbar-track,
+.composer__field::-webkit-scrollbar-track,
+.bubble pre::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat::-webkit-scrollbar-thumb,
+.history::-webkit-scrollbar-thumb,
+.composer__field::-webkit-scrollbar-thumb,
+.bubble pre::-webkit-scrollbar-thumb {
+  background-color: var(--border-strong);
+  border-radius: var(--r-full);
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+.chat::-webkit-scrollbar-thumb:hover,
+.history::-webkit-scrollbar-thumb:hover,
+.bubble pre::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text-subtle);
+}
+
+/* ---- Tombol "scroll ke bawah" ---- */
+.scroll-bottom {
+  position: absolute;
+  right: var(--sp-5);
+  bottom: var(--sp-4);
+  z-index: 15;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-full);
+  color: var(--text-muted);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity var(--dur) var(--ease-out),
+              transform var(--dur) var(--ease-out),
+              visibility var(--dur) var(--ease-out);
+}
+
+.scroll-bottom.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.scroll-bottom:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+
+/* ==========================================================================
+   11. ANIMASI
+   ========================================================================== */
+
+@keyframes msg-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+
+
+/* ==========================================================================
+   12. RESPONSIVE
+   ========================================================================== */
+
+/* ---- Tablet: sidebar lebih ringkas ---- */
+@media (max-width: 1100px) {
+  :root { --sidebar-w: 232px; }
+}
+
+/* ---- Mobile: sidebar jadi drawer ---- */
+@media (max-width: 860px) {
+  :root { --topbar-h: 58px; }
+
+  .app { grid-template-columns: minmax(0, 1fr); }
+
+  .sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: min(300px, 84vw);
+    transform: translateX(-100%);
+    transition: transform var(--dur-slow) var(--ease-out),
+                background-color var(--dur) var(--ease-in-out);
+    box-shadow: var(--shadow-lg);
+  }
+
+  body.nav-open .sidebar { transform: translateX(0); }
+
+  .icon-btn--menu { display: grid; }
+
+  .topbar { padding: 0 var(--sp-3); }
+
+  .chat__inner { padding: var(--sp-6) var(--sp-4) var(--sp-8); }
+
+  .composer { padding: var(--sp-2) var(--sp-4) var(--sp-4); }
+
+  .msg__body { max-width: 88%; }
+
+  .scroll-bottom { right: var(--sp-4); }
+}
+
+/* ---- Mobile kecil ---- */
+@media (max-width: 560px) {
+  :root {
+    --fs-base: 0.9375rem;
+    --fs-2xl:  1.5rem;
+  }
+
+  .suggestions { grid-template-columns: minmax(0, 1fr); }
+
+  .welcome { padding: var(--sp-6) 0; gap: var(--sp-5); }
+
+  .welcome__badge { width: 54px; height: 54px; border-radius: var(--r-md); }
+
+  .welcome__badge .icon { width: 26px; height: 26px; }
+
+  .chat__inner { gap: var(--sp-5); }
+
+  /* Sembunyikan avatar agar ruang baca lebih lega */
+  .msg__avatar { display: none; }
+
+  .msg__body { max-width: 100%; }
+
+  .msg--user .msg__body { max-width: 90%; }
+
+  .bubble {
+    padding: var(--sp-3);
+    border-radius: var(--r-md);
+  }
+
+  .composer__hint { display: none; }
+
+  .msg__copy { opacity: 1; }
+}
+
+/* ---- Layar sangat tinggi: pusatkan composer ---- */
+@media (min-width: 861px) and (min-height: 900px) {
+  .chat__inner { padding-top: var(--sp-12); }
+}
+
+
+/* ==========================================================================
+   13. REDUCED MOTION & PRINT
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .typing__dot { opacity: 1; }
+  .cursor { animation: none; }
+}
+
+/* Dukungan high-contrast mode */
+@media (forced-colors: active) {
+  .btn-new,
+  .btn-send,
+  .brand__mark,
+  .welcome__badge,
+  .msg__avatar--ai {
+    border: 1px solid ButtonText;
+  }
+
+  .bubble {
+    border: 1px solid CanvasText;
+  }
+}
+
+@media print {
+  body { overflow: visible; height: auto; }
+
+  .sidebar,
+  .topbar,
+  .composer,
+  .scroll-bottom,
+  .toast-wrap,
+  .msg__copy {
+    display: none !important;
+  }
+
+  .app { display: block; height: auto; }
+
+  .chat { overflow: visible; }
+
+  .bubble {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+}
+
+@keyframes typing-bounce {
+  0%, 60%, 100% { transform: translateY(0);    opacity: 0.4; }
+  30%           { transform: translateY(-4px); opacity: 1;   }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes toast-out {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to   { opacity: 0; transform: translateY(8px) scale(0.96); }
+}
+
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 var(--accent-ring); }
+  100% { box-shadow: 0 0 0 10px transparent; }
+}
