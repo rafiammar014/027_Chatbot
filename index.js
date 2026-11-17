@@ -38,5 +38,10 @@ app.post("/api/chat", async (req, res) => {
             })
         }
     );
+       
+    if (!response.ok) {
+        const errorData = await response.text();
+        console.error("Error response from OpenRouter API:", errorData);
+        return res.status(response.status).json({ error: "errorData" });
+    }
 
-    
